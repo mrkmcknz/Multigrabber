@@ -2,6 +2,7 @@ aiodns==1.1.1
 aiohttp==1.1.5
 async-timeout==1.1.0
 chardet==2.3.0
+feedparser==5.2.1
 multidict==2.1.2
 pycares==2.1.1
 yarl==0.7.1

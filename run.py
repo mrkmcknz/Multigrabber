@@ -2,6 +2,7 @@
 import argparse
 import aiohttp
 import asyncio
+import feedparser
 
 
 async def fetch(session, url):
@@ -20,8 +21,26 @@ async def run(filepath):
                 tasks.append(task)
 
             data = await asyncio.gather(*tasks)
-            # Do what you want with the data here
+            # Do what you want with the data
+            for i in data:
+                parse_rss_feed(i)
 
+
+def rss_item(item):
+
+    data = {
+        "title": item.title,
+        "link": item.link,
+        "descriptions": item.description,
+        "published_on": item.published
+    }
+    return data
+
+
+def parse_rss_feed(feed):
+
+    parse = feedparser.parse(feed)
+    return [rss_item(item) for item in parse.entries]
 
 if __name__ == '__main__':
 
