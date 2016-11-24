@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3.5
-import json
 import argparse
 import asyncio
 import hashlib
