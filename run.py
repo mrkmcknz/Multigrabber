@@ -10,9 +10,13 @@ from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
 async def fetch(session, url):
-    with aiohttp.Timeout(10):
-        async with session.get(url) as response:
-            return await response.read()
+    try:
+        with aiohttp.Timeout(10):
+            async with session.get(url) as response:
+                return await response.read()
+    except Exception as e:
+        print(e)
+
 
 async def run(filepath, es):
 
@@ -25,7 +29,7 @@ async def run(filepath, es):
                 task = asyncio.ensure_future(fetch(session, url))
                 tasks.append(task)
 
-            data = await asyncio.gather(*tasks)
+            data = await asyncio.gather(*tasks, return_exceptions=False)
             results = [parse_rss_feed(i) for i in data]
             for feed in results:
                 actions = es_action(feed, actions)
@@ -49,10 +53,10 @@ def es_action(feed, actions):
 def rss_item(item):
 
     data = {
-        "title": item.title,
-        "link": item.link,
-        "description": item.description,
-        "published_on": arrow.get(item.published_parsed).isoformat()
+        "title": item.get('title'),
+        "link": item.get('link'),
+        "description": item.get('description'),
+        "published_on": arrow.get(item.get('published_parsed')).isoformat()
     }
     return data
 
