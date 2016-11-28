@@ -13,7 +13,7 @@ from elasticsearch import helpers
 
 async def fetch(session, url):
     try:
-        with aiohttp.Timeout(1):
+        with aiohttp.Timeout(5):
             async with session.get(url) as response:
                 return await response.read()
     except Exception as e:
@@ -36,6 +36,7 @@ async def run(filepath, es):
             for feed in results:
                 actions = es_action(feed, actions)
             helpers.bulk(es, actions)
+        input.close()
 
 
 def es_action(feed, actions):
