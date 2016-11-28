@@ -1,7 +1,9 @@
 #!/usr/local/bin/python3.5
 import argparse
 import asyncio
+import uvloop
 import hashlib
+import time
 
 import aiohttp
 import arrow
@@ -11,7 +13,7 @@ from elasticsearch import helpers
 
 async def fetch(session, url):
     try:
-        with aiohttp.Timeout(10):
+        with aiohttp.Timeout(1):
             async with session.get(url) as response:
                 return await response.read()
     except Exception as e:
@@ -77,10 +79,12 @@ if __name__ == '__main__':
         help="path to file containing urls to be processed")
     args = parser.parse_args()
 
-    import time
-    start = time.time()
-    loop = asyncio.get_event_loop()
-    future = asyncio.ensure_future(run(args.filepath, es))
-    loop.run_until_complete(future)
-    end = time.time()
-    print(end - start)
+    while True:
+        start = time.time()
+        loop = uvloop.new_event_loop()
+        asyncio.set_event_loop(loop)
+        future = asyncio.ensure_future(run(args.filepath, es))
+        loop.run_until_complete(future)
+        end = time.time()
+        print(end - start)
+        time.sleep(60)

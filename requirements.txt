@@ -2,6 +2,8 @@ aiodns==1.1.1
 aiohttp==1.1.5
 arrow==0.8.0
 async-timeout==1.1.0
+asyncio==3.4.3
+certifi==2016.9.26
 chardet==2.3.0
 elasticsearch==5.0.1
 feedparser==5.2.1
@@ -10,4 +12,5 @@ pycares==2.1.1
 python-dateutil==2.6.0
 six==1.10.0
 urllib3==1.19.1
+uvloop==0.6.5
 yarl==0.7.1
