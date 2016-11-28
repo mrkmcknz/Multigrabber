@@ -13,7 +13,7 @@ from elasticsearch import helpers
 
 async def fetch(session, url):
     try:
-        with aiohttp.Timeout(5):
+        with aiohttp.Timeout(3):
             async with session.get(url) as response:
                 return await response.read()
     except Exception as e:
