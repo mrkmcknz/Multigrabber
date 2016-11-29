@@ -35,21 +35,24 @@ async def run(filepath, es):
             results = [parse_rss_feed(i) for i in data]
             for feed in results:
                 actions = es_action(feed, actions)
-            helpers.bulk(es, actions)
+            #helpers.bulk(es, actions)
         input.close()
 
 
 def es_action(feed, actions):
 
     for item in feed:
-        action = {
-            "_id": hashlib.md5(item['link'].encode('utf-8')).hexdigest(),
-            "_index": "news",
-            "_type": "feed",
-            "_source": item,
-            "op_type": "create"
-        }
-        actions.append(action)
+        try:
+            action = {
+                "_id": hashlib.md5(item.get('link').encode('utf-8')).hexdigest(),
+                "_index": "news",
+                "_type": "feed",
+                "_source": item,
+                "op_type": "create"
+            }
+            actions.append(action)
+        except:
+            continue
     return actions
 
 
@@ -88,4 +91,5 @@ if __name__ == '__main__':
         loop.run_until_complete(future)
         end = time.time()
         print(end - start)
+        loop.close()
         time.sleep(60)
