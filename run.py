@@ -35,7 +35,7 @@ async def run(filepath, es):
             results = [parse_rss_feed(i) for i in data]
             for feed in results:
                 actions = es_action(feed, actions)
-            #helpers.bulk(es, actions)
+            helpers.bulk(es, actions)
         input.close()
 
 
