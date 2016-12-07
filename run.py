@@ -13,12 +13,11 @@ from elasticsearch import helpers
 
 async def fetch(session, url):
     try:
-        with aiohttp.Timeout(3):
+        with aiohttp.Timeout(5):
             async with session.get(url) as response:
                 return await response.read()
     except Exception as e:
         print(e)
-
 
 async def run(filepath, es):
 
@@ -62,7 +61,12 @@ def rss_item(item):
         "title": item.get('title'),
         "link": item.get('link'),
         "description": item.get('description'),
-        "published_on": arrow.get(item.get('published_parsed')).isoformat()
+        "publisher": item.get('publisher'),
+        "author": item.get('author'),
+        "summary": item.get('summary'),
+        "content": item.get('content'),
+        "published_on": arrow.get(item.get('published_parsed')).isoformat(),
+        "created_on": arrow.get(item.get('created_parsed')).isoformat()
     }
     return data
 
