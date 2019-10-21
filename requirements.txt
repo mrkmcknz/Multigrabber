@@ -11,6 +11,6 @@ multidict==2.1.2
 pycares==2.1.1
 python-dateutil==2.6.0
 six==1.10.0
-urllib3==1.19.1
+urllib3==1.24.2
 uvloop==0.6.5
 yarl==0.7.1
